@@ -38,7 +38,7 @@ function_descriptions = [
     }
 ]
 
-class Text(BaseModel):
+class Texte(BaseModel):
      content: str
     
 @app.get("/")
@@ -46,7 +46,7 @@ def read_root():
  return {"Hello": "World"}
 
 @app.post("/")
-def analyse_email(text: Text):
+def analyse_email(text: Texte):
  content = text.content
  query = f"Please describe and extract key information from this text: {content} "
 
