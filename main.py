@@ -41,35 +41,36 @@ function_descriptions = [
 class Email(BaseModel):
      from_email: str
      content: str
- @app.get("/")
- def read_root():
-     return {"Hello": "World"}
+    
+@app.get("/")
+def read_root():
+ return {"Hello": "World"}
 
- @app.post("/")
- def analyse_email(email: Email):
-     content = email.content
-     query = f"Please describe and extract key information from this text: {content} "
+@app.post("/")
+def analyse_email(email: Email):
+ content = email.content
+ query = f"Please describe and extract key information from this text: {content} "
 
-     messages = [{"role": "user", "content": query}]
+ messages = [{"role": "user", "content": query}]
 
-     response = openai.ChatCompletion.create(
-         model="gpt-4-0613",
-         messages=messages,
-         functions = function_descriptions,
-         function_call="auto"
-     )
+ response = openai.ChatCompletion.create(
+     model="gpt-4-0613",
+     messages=messages,
+     functions = function_descriptions,
+     function_call="auto"
+ )
 
-     arguments = response.choices[0]["message"]["function_call"]["arguments"]
-     topic = eval(arguments).get("topic")
-     keywords = eval(arguments).get("keywords")
-     details = eval(arguments).get("details")
-     blogPost = eval(arguments).get("blogPost")
+ arguments = response.choices[0]["message"]["function_call"]["arguments"]
+ topic = eval(arguments).get("topic")
+ keywords = eval(arguments).get("keywords")
+ details = eval(arguments).get("details")
+ blogPost = eval(arguments).get("blogPost")
 
-     return {
-         "topic": topic,
-         "keywords": keywords,
-         "details": details,
-         "blogPost": blogPost,
+ return {
+     "topic": topic,
+     "keywords": keywords,
+     "details": details,
+     "blogPost": blogPost,
 
-     }
+ }
 
