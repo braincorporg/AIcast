@@ -84,7 +84,7 @@ def read_root():
 
 @app.post("/")
 def analyse_email(text: texte):
- openai.api_key = openaiApiKey
+ openai.api_key = text.openaiApiKey
  content = text.content
  query = f"Please describe and extract key information from this text: {content} "
 
