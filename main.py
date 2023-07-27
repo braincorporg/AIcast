@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = openaiApiKey
 
 app = FastAPI()
 
@@ -38,11 +38,12 @@ function_descriptions = [
     }
 ]
 
-AIRTABLE_API_KEY = os.getenv("AIRTABLE_TOKEN")
-AIRTABLE_BASE_ID = os.getenv("BASE_ID")
-AIRTABLE_TABLE_NAME = "result"
 
-def write_to_airtable(topic, keywords, details, blogPost):
+def write_to_airtable(apiKey, baseId, topic, keywords, details, blogPost):
+    # use apiKey, baseId, tableName in your function
+    AIRTABLE_API_KEY = apiKey
+    AIRTABLE_BASE_ID = baseId
+    AIRTABLE_TABLE_NAME = "result"
     headers = {
         'Authorization': f'Bearer {AIRTABLE_API_KEY}',
         'Content-Type': 'application/json'
@@ -75,13 +76,17 @@ def write_to_airtable(topic, keywords, details, blogPost):
 
 class texte(BaseModel):
      content: str
-    
+     apiKey: str
+     baseId: str
+     tableName: str
+
 @app.get("/")
 def read_root():
  return {"Hello": "World"}
 
 @app.post("/")
 def analyse_email(text: texte):
+ openai.api_key = openaiApiKey
  content = text.content
  query = f"Please describe and extract key information from this text: {content} "
 
@@ -100,7 +105,7 @@ def analyse_email(text: texte):
  keywords = eval(arguments).get("keywords")
  details = eval(arguments).get("details")
  blogPost = eval(arguments).get("blogPost")
- write_to_airtable(topic, keywords, details, blogPost)
+ write_to_airtable(text.apiKey, text.baseId, topic, keywords, details, blogPost)
  return {
      "topic": topic,
      "keywords": keywords,
