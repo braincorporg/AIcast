@@ -29,7 +29,7 @@ function_descriptions = [
                 },
                 "blogPost": {
                     "type": "string",
-                    "description": "Create a blog post based on all the informations you have about that subject, including keywords and technical details"
+                    "description": 'Create a blog post based on all the informations you have about that subject, including keywords and technical details. Always start and end this response with "" '
                 },
             },
             "required": ["topic", "keywords", "details", "blogPost"]
