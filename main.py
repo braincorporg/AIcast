@@ -104,6 +104,7 @@ def analyse_email(text: texte):
  keywords = eval(arguments).get("keywords")
  details = eval(arguments).get("details")
  blogPost = eval(arguments).get("blogPost")
+ blogPost = '"""' + blogPost + '"""'
  print(blogPost)
  write_to_airtable(text.apiKey, text.baseId, topic, keywords, details, blogPost)
  return {
