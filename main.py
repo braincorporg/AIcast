@@ -38,6 +38,41 @@ function_descriptions = [
     }
 ]
 
+AIRTABLE_API_KEY = os.getenv("AIRTABLE_TOKEN")
+AIRTABLE_BASE_ID = os.getenv("BASE_ID")
+AIRTABLE_TABLE_NAME = "result"
+
+def write_to_airtable(topic, keywords, details, blogPost):
+    headers = {
+        'Authorization': f'Bearer {AIRTABLE_API_KEY}',
+        'Content-Type': 'application/json'
+    }
+
+    data = {
+        "records": [
+            {
+                "fields": {
+                    "topic": topic,
+                    "keywords": keywords,
+                    "details": details,
+                    "blogPost": blogPost
+                }
+            }
+        ]
+    }
+
+    response = requests.post(
+        f'https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{AIRTABLE_TABLE_NAME}',
+        headers=headers,
+        json=data
+    )
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return response.status_code
+
+
 class texte(BaseModel):
      content: str
     
@@ -65,7 +100,7 @@ def analyse_email(text: texte):
  keywords = eval(arguments).get("keywords")
  details = eval(arguments).get("details")
  blogPost = eval(arguments).get("blogPost")
-
+ write_to_airtable(topic, keywords, details, blogPost)
  return {
      "topic": topic,
      "keywords": keywords,
