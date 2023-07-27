@@ -5,8 +5,6 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 load_dotenv()
-openai.api_key = openaiApiKey
-
 app = FastAPI()
 
 function_descriptions = [
@@ -78,7 +76,7 @@ class texte(BaseModel):
      content: str
      apiKey: str
      baseId: str
-     tableName: str
+     openaiApiKey: str
 
 @app.get("/")
 def read_root():
