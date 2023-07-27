@@ -60,6 +60,7 @@ def analyse_email(text: texte):
  )
 
  arguments = response.choices[0]["message"]["function_call"]["arguments"]
+ print(arguments)
  topic = eval(arguments).get("topic")
  keywords = eval(arguments).get("keywords")
  details = eval(arguments).get("details")
